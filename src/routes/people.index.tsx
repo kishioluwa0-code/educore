@@ -1,0 +1,45 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { Mail, Pencil, Phone, Search, ShieldCheck, UserRound, Users } from "lucide-react";
+import { AppShell } from "@/components/shell/app-shell";
+import { PageHeader, SectionCard } from "@/components/kit/page";
+import { StatusBadge } from "@/components/kit/status-badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useStudents } from "@/data/student-store";
+import { saveStaffRecord, useStaffRecords } from "@/data/staff-store";
+import { deactivateClassTeacherAssignment, saveClassTeacherAssignment, useClassTeacherAssignments } from "@/data/academic-store";
+import { useAcademicStructure } from "@/data/academic-structure-store";
+import { useAcademicContext } from "@/lib/academic-context";
+import { useRole } from "@/lib/role-context";
+
+export const Route = createFileRoute("/people/")({
+  head: () => ({ meta: [{ title: "People — EduCore" }, { name: "description", content: "Students, parents, guardians and staff directories." }, { name: "robots", content: "noindex" }] }),
+  component: PeoplePage,
+});
+
+function PeoplePage() {
+  const students = useStudents();
+  const staffRecords = useStaffRecords();
+  const classTeacherAssignments = useClassTeacherAssignments();
+  const academic = useAcademicStructure();
+  const { session, term } = useAcademicContext();
+  const { role } = useRole();
+  const canEditStaff = role === "administrator" || role === "principal" || role === "hr";
+  const [query, setQuery] = useState("");
+  const guardians = useMemo(() => {
+    const records = students.flatMap((student) => student.guardians.map((guardian) => ({ ...guardian, studentName: `${student.firstName} ${student.lastName}`, studentId: student.id })));
+    const unique = new Map(records.map((guardian) => [guardian.id, guardian]));
+    return [...unique.values()].filter((guardian) => `${guardian.name} ${guardian.phone} ${guardian.studentName}`.toLowerCase().includes(query.toLowerCase()));
+  }, [students, query]);
+  const staff = staffRecords.filter((member) => `${member.name} ${member.role} ${member.dept} ${member.status}`.toLowerCase().includes(query.toLowerCase()));
+
+  return <AppShell>
+    <PageHeader title="People" description="Manage the people connected to your school and their approved relationships." breadcrumbs={[{ label: "EduCore", to: "/dashboard" }, { label: "People" }]} actions={<div className="flex gap-2">{canEditStaff && <Button asChild size="sm"><Link to="/people/staff/new"><Users className="size-4" /> Onboard staff</Link></Button>}<Button asChild size="sm"><Link to="/people/students">Open student register</Link></Button></div>} />
+    <div className="mt-6 grid gap-4 sm:grid-cols-3"><div className="rounded-lg border border-border bg-surface p-4 shadow-card"><Users className="size-5 text-info" /><p className="mt-3 text-2xl font-semibold">{students.length}</p><p className="text-xs text-muted-foreground">Students</p></div><div className="rounded-lg border border-border bg-surface p-4 shadow-card"><UserRound className="size-5 text-teal" /><p className="mt-3 text-2xl font-semibold">{guardians.length}</p><p className="text-xs text-muted-foreground">Linked guardians</p></div><div className="rounded-lg border border-border bg-surface p-4 shadow-card"><ShieldCheck className="size-5 text-success" /><p className="mt-3 text-2xl font-semibold">{staffRecords.length}</p><p className="text-xs text-muted-foreground">Staff records</p></div></div>
+    {canEditStaff && <SectionCard className="mt-6" title="Teacher profiles" description="Maintain employment status and qualification verification before assigning teaching work."><div className="divide-y divide-border rounded-md border border-border">{staffRecords.filter((member) => member.role.toLowerCase().includes("teacher")).map((member) => <div key={member.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3"><div><p className="font-medium">{member.name}</p><p className="text-xs text-muted-foreground">{member.id} · {member.jobTitle} · {member.employmentType}</p><p className="text-xs text-muted-foreground">Qualification: {member.qualificationStatus} · Documents: {member.documentsComplete ? "Complete" : "Pending"}</p></div><div className="flex items-center gap-3"><StatusBadge tone={member.status === "Active" ? "success" : "warning"}>{member.status}</StatusBadge><Button variant="outline" size="sm" onClick={() => { const status = window.prompt("Employment status", member.status); if (!status) return; const qualificationStatus = window.prompt("Qualification status (Pending or Verified)", member.qualificationStatus); if (!qualificationStatus) return; saveStaffRecord(member.id, { status: status as typeof member.status, qualificationStatus: qualificationStatus as typeof member.qualificationStatus }, role); }}> <Pencil className="size-4" /> Update profile</Button></div></div>)}</div></SectionCard>}
+    {canEditStaff && <SectionCard className="mt-6" title="Class-teacher assignments" description={`Assign primary class ownership for ${session} · ${term}. Subject assignments remain in Academics.`}><div className="space-y-3">{academic.classes.filter((item) => item.section === "Primary").map((classRow) => { const current = classTeacherAssignments.find((item) => item.classId === classRow.id && item.session === session && item.term === term && item.active); const eligible = staffRecords.filter((member) => member.status === "Active" && member.qualificationStatus === "Verified" && member.role.toLowerCase().includes("teacher")); return <div key={classRow.id} className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border px-3 py-3"><div><p className="font-medium">{classRow.level} {classRow.arm}</p><p className="text-xs text-muted-foreground">Current: {current?.teacherName ?? "Unassigned"}</p></div><div className="flex items-center gap-2"> <Select value={current?.teacherId ?? "unassigned"} onValueChange={(teacherId) => { if (teacherId === "unassigned") deactivateClassTeacherAssignment(classRow.id, session, term, role); else { const teacher = eligible.find((item) => item.id === teacherId); if (teacher) saveClassTeacherAssignment({ classId: classRow.id, teacherId, teacherName: teacher.name, session, term, effectiveFrom: new Date().toISOString().slice(0, 10), active: true, assignedBy: role }, role); } }}><SelectTrigger className="h-8 w-52 text-xs"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="unassigned">Unassigned</SelectItem>{eligible.map((teacher) => <SelectItem key={teacher.id} value={teacher.id}>{teacher.name}</SelectItem>)}</SelectContent></Select></div></div>; })}</div></SectionCard>}
+    <SectionCard className="mt-6" bodyClassName="p-0"><div className="flex items-center gap-2 border-b border-border px-5 py-3"><Search className="size-4 text-muted-foreground" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search people, phone or student" className="h-8 border-0 px-0 shadow-none focus-visible:ring-0" aria-label="Search people" /></div><Tabs defaultValue="guardians" className="p-5"><TabsList><TabsTrigger value="guardians">Parents & guardians</TabsTrigger><TabsTrigger value="staff">Teaching & support staff</TabsTrigger></TabsList><TabsContent value="guardians" className="mt-4"><div className="divide-y divide-border rounded-md border border-border">{guardians.map((guardian) => <div key={guardian.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3"><div><p className="font-medium">{guardian.name}</p><p className="text-xs text-muted-foreground">{guardian.relationship} of {guardian.studentName} · {guardian.phone}</p></div><div className="flex items-center gap-3"><StatusBadge tone={guardian.verified === "Verified" ? "success" : "warning"}>{guardian.verified}</StatusBadge><a className="text-muted-foreground hover:text-foreground" href={`tel:${guardian.phone}`} aria-label={`Call ${guardian.name}`}><Phone className="size-4" /></a><a className="text-muted-foreground hover:text-foreground" href={`mailto:${guardian.email}`} aria-label={`Email ${guardian.name}`}><Mail className="size-4" /></a></div></div>)}{guardians.length === 0 && <p className="p-6 text-center text-sm text-muted-foreground">No guardians match this search.</p>}</div></TabsContent><TabsContent value="staff" className="mt-4"><div className="divide-y divide-border rounded-md border border-border">{staff.map((member) => <div key={member.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3"><div><p className="font-medium">{member.name}</p><p className="text-xs text-muted-foreground">{member.role} · {member.dept} · {member.id}</p></div><StatusBadge tone={member.status === "Active" ? "success" : "warning"}>{member.status}</StatusBadge></div>)}</div></TabsContent></Tabs></SectionCard>
+  </AppShell>;
+}
