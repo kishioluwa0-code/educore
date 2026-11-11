@@ -1,0 +1,10 @@
+ALTER TABLE "attendance_records" RENAME COLUMN "session" TO "session_id";
+ALTER TABLE "attendance_records" RENAME COLUMN "term" TO "term_id";
+ALTER TABLE "attendance_records" ALTER COLUMN "class_id" TYPE uuid USING "class_id"::uuid;
+ALTER TABLE "attendance_records" ALTER COLUMN "arm_id" TYPE uuid USING "arm_id"::uuid;
+ALTER TABLE "attendance_records" ALTER COLUMN "session_id" TYPE uuid USING "session_id"::uuid;
+ALTER TABLE "attendance_records" ALTER COLUMN "term_id" TYPE uuid USING "term_id"::uuid;
+ALTER TABLE "attendance_records" ADD CONSTRAINT "attendance_records_class_id_fk" FOREIGN KEY ("class_id") REFERENCES "academic_classes"("id") ON DELETE cascade;
+ALTER TABLE "attendance_records" ADD CONSTRAINT "attendance_records_arm_id_fk" FOREIGN KEY ("arm_id") REFERENCES "academic_arms"("id") ON DELETE cascade;
+ALTER TABLE "attendance_records" ADD CONSTRAINT "attendance_records_session_id_fk" FOREIGN KEY ("session_id") REFERENCES "academic_sessions"("id") ON DELETE cascade;
+ALTER TABLE "attendance_records" ADD CONSTRAINT "attendance_records_term_id_fk" FOREIGN KEY ("term_id") REFERENCES "academic_terms"("id") ON DELETE cascade;

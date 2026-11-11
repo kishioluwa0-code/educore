@@ -1,0 +1,244 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1788518008041,
+      "tag": "0000_outgoing_the_enforcers",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788519536826,
+      "tag": "0001_smart_namorita",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788810049846,
+      "tag": "0004_numerous_falcon",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1788873656239,
+      "tag": "0003_worried_scarecrow",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1788877225701,
+      "tag": "0004_clean_johnny_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1788879000000,
+      "tag": "0005_one_time_passwords",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1788879100000,
+      "tag": "0006_school_logo",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1788885000000,
+      "tag": "0007_academic_scope",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1788886000000,
+      "tag": "0008_academic_assignment_history",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1788886200000,
+      "tag": "0009_academic_assignment_capabilities",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1788887000000,
+      "tag": "0010_attendance_records",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1788887100000,
+      "tag": "0011_attendance_capabilities",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1788891000000,
+      "tag": "0012_attendance_academic_refs",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1788891100000,
+      "tag": "0013_attendance_exceptions",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1788892000000,
+      "tag": "0014_academic_structure_capabilities",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1788893000000,
+      "tag": "0015_attendance_idempotency",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1788924283079,
+      "tag": "0016_sticky_salo",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1788941594852,
+      "tag": "0017_omniscient_redwing",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1789022562750,
+      "tag": "0018_third_the_phantom",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1789023583511,
+      "tag": "0019_workable_madelyne_pryor",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1789023610926,
+      "tag": "0020_sweet_silhouette",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1789024188287,
+      "tag": "0021_curly_valkyrie",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1789024568800,
+      "tag": "0022_cool_sir_ram",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1789024989158,
+      "tag": "0023_luxuriant_clint_barton",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1789025380053,
+      "tag": "0024_medical_psylocke",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1789026023332,
+      "tag": "0025_chunky_jetstream",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1789027144585,
+      "tag": "0026_empty_harry_osborn",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1789027783720,
+      "tag": "0027_chemical_marvel_boy",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1789028251182,
+      "tag": "0028_loving_the_renegades",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1789029369082,
+      "tag": "0029_black_screwball",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1789029562622,
+      "tag": "0030_petite_hardball",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1789030744014,
+      "tag": "0031_magical_richard_fisk",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1789031206142,
+      "tag": "0032_serious_banshee",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1789032000000,
+      "tag": "0033_cbt_result_jobs",
+      "breakpoints": true
+    }
+  ]
+}

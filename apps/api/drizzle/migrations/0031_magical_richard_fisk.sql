@@ -1,0 +1,1 @@
+ALTER TABLE "grade_rows" ADD COLUMN "score_sources" jsonb DEFAULT '{}'::jsonb NOT NULL;
